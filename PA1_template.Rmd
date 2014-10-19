@@ -21,7 +21,7 @@ activity$r.date <- as.Date(activity$date, "%Y-%m-%d")
 ## What is mean total number of steps taken per day?
 
 ### Make a histogram of the total number of steps taken each day
-```{r}
+```{r Total_Steps_by_Day}
 total.daily.steps <- tapply(activity$steps, activity$r.date, sum, na.rm = TRUE)
 
 hist(total.daily.steps, xlab = "Day", ylab = "Count", main = "Total Steps by Day")
@@ -39,7 +39,7 @@ The median steps per day is `r median.steps`.
 ## What is the average daily activity pattern?
 
 ### Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
-```{r}
+```{r Avg_Steps_per_Interval}
 interval.steps.mean <- tapply(activity$steps, activity$interval, mean, na.rm = TRUE)
 
 plot(interval.steps.mean, type = "l", main = "Avg Steps per Interval", xlab = "Interval Number", ylab = "Avg Steps")
@@ -69,10 +69,10 @@ activity.impute$steps <- impute(activity.impute$steps, mean)
 ```
 
 ### Repeat earlier analysis using imputed values
-```{r}
+```{r Total_Steps_by_Day_Imputed}
 total.daily.steps.impute <- tapply(activity.impute$steps, activity.impute$date, sum)
 
-hist(total.daily.steps.impute, xlab = "Day", ylab = "Count", main = "Total Steps by Day")
+hist(total.daily.steps.impute, xlab = "Day", ylab = "Count", main = "Total Steps by Day (with Inputed)")
 
 mean.steps.impute <- mean(total.daily.steps.impute)
 median.steps.impute <- median(total.daily.steps.impute)
@@ -85,7 +85,6 @@ The imputation appears to have caused summary statistics to be higher.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-
 ### Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 ```{r}
 activity.impute$date.type <- as.factor(ifelse(weekdays(activity.impute$r.date) %in% c("Saturday", "Sunday"), "Weekend", "Weekday"))
@@ -94,7 +93,7 @@ is.factor(activity.impute$date.type)
 ```
 
 ### Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
-```{r}
+```{r Weekday_vs_Weekend_Trend}
 date.type.means <- aggregate(steps ~ date.type + interval, data = activity.impute, mean)
 
 require(lattice)
